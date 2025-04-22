@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetClose } from "@/com
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import Image from "next/image"
-import { Menu } from "lucide-react"
+import { Menu, ChevronLeft, ChevronRight } from "lucide-react"
 import SidebarNav from "./sidebar-nav"
 
 interface AppShellProps {
@@ -15,6 +15,7 @@ interface AppShellProps {
 export default function AppShell({ children }: AppShellProps) {
   const [isMobile, setIsMobile] = useState(false)
   const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
   useEffect(() => {
     // Check if window is client-side
@@ -69,22 +70,39 @@ export default function AppShell({ children }: AppShellProps) {
             </div>
           </SheetContent>
         </Sheet>
-      )}
-
-      {/* Desktop Sidebar */}
+      )}      {/* Desktop Sidebar */}
       {!isMobile && (
-        <div className="hidden md:flex h-full w-[240px] flex-col border-r">
-          <div className="flex items-center h-16 px-4">
-            <Image
-              src="/next.svg"
-              alt="Next.js logo"
-              width={80}
-              height={20}
-              className="dark:invert"
-            />
+        <div 
+          className={`hidden md:flex h-full flex-col border-r transition-all duration-300 ease-in-out ${
+            isSidebarCollapsed ? "w-[70px]" : "w-[240px]"
+          }`}
+        >
+          <div className="flex items-center h-16 px-4 justify-between">
+            {!isSidebarCollapsed && (
+              <Image
+                src="/next.svg"
+                alt="Next.js logo"
+                width={80}
+                height={20}
+                className="dark:invert"
+              />
+            )}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+              className="ml-auto"
+              aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {isSidebarCollapsed ? (
+                <ChevronRight className="h-4 w-4" />
+              ) : (
+                <ChevronLeft className="h-4 w-4" />
+              )}
+            </Button>
           </div>
           <Separator />
-          <SidebarNav />
+          <SidebarNav collapsed={isSidebarCollapsed} />
         </div>
       )}      {/* Main Content */}
       <div className="flex flex-col flex-1 overflow-auto">
