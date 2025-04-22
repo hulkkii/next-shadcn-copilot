@@ -1,0 +1,55 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "Next.js with Shadcn UI",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+	"features": {
+		"ghcr.io/devcontainers/features/git-lfs:1": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {}
+	},
+
+	// Host requirements
+	// "hostRequirements": {
+	// 	"cpus": 4
+	// },
+
+	// Wait for onCreateCommand to complete before continuing
+	"waitFor": "onCreateCommand",
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [3000],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"updateContentCommand": "npm install",
+	"postCreateCommand": "npm run build",
+
+	// Start the application server after attaching to the container
+	"postAttachCommand": {
+		"server": "npm run dev"
+	},
+
+	// Configure tool-specific properties.
+	"customizations": {
+		"codespaces": {
+			"openFiles": [
+				"app/page.tsx"
+			]
+		},
+		"vscode": {
+			"extensions": [
+				"bradlc.vscode-tailwindcss",
+				"esbenp.prettier-vscode",
+				"dbaeumer.vscode-eslint"
+			]
+		}
+	},
+
+	// Configure port attributes
+	"portsAttributes": {
+		"3000": {
+			"label": "Next.js Application",
+			"onAutoForward": "openPreview"
+		}
+	}
+}
